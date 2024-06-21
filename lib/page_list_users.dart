@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:httpreq/api_data_source.dart';
+import 'package:httpreq/detail_page.dart';
 import 'list_users_model.dart';
 
 class PageListUser extends StatefulWidget {
@@ -60,7 +61,13 @@ class _PageListUserState extends State<PageListUser> {
 
   Widget _buildItemUsers(Data userData){
     return InkWell(
-      onTap: (){},
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context){
+          return DetailPage(id: userData.id!);
+        }
+        )
+        );
+      },
       child: Card(
         child: Row(
           children: [

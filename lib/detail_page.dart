@@ -11,9 +11,18 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-          body: _buildUserData(id),
-        )
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text('User $id'),
+        ),
+        body: _buildUserData(id),
+      ),
     );
   }
 
@@ -27,7 +36,7 @@ class DetailPage extends StatelessWidget {
           if (snapshot.hasError) {
             return _buildErrorSection();
           }
-          if(snapshot.hasData) {
+          if (snapshot.hasData) {
             UserDetails detailUser = UserDetails.fromJson(snapshot.data);
             return _buildSuccessSection(detailUser.data!);
           }
@@ -37,7 +46,12 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _buildErrorSection() {
-    return const Text("Error");
+    return Center(
+      child: Text(
+        "Error",
+        style: TextStyle(fontSize: 18, color: Colors.red),
+      ),
+    );
   }
 
   Widget _buildLoadingSection() {
@@ -48,17 +62,39 @@ class DetailPage extends StatelessWidget {
 
   Widget _buildSuccessSection(Data data) {
     return SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              Text(data.id!.toString()),
-              Image.network(data.avatar!),
-              Text("Nama : " + data.firstName! + " " + data.lastName!),
-              Text("Email : " + data.email!),
-
-            ],
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(data.avatar!),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "${data.firstName!} ${data.lastName!}",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    data.email!,
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                  ),
+                ],
+              ),
+            ),
           ),
-        )
+        ),
+      ),
     );
   }
 }
